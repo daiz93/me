@@ -3,56 +3,39 @@ name: Deploy Portfolio to Server
 on:
   push:
     branches:
-      - main  # Déclenche le workflow à chaque push sur la branche 'main'
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # Utilise une machine virtuelle Linux pour exécuter les étapes
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # Récupère la dernière version de votre code
+        uses: actions/checkout@v4
 
-      #--- Section Optionnelle: Étape de Build ---
-      #Si vous intégrez un outil de build (Vite, Parcel, etc.) avec package.json
-      #Décommentez et adaptez les lignes suivantes :
-      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.15.0' # Ou la version Node.js que vous utilisez
-          cache: 'npm' # Ou 'yarn'
-      
-      - name: Install dependencies
-        run: npm install # Ou yarn install
-      
-      - name: Build project
-        run: npm run build # Ou yarn build (ou la commande de build de votre projet)
-      
-      #--- Fin de la Section Optionnelle: Étape de Build ---
+          node-version: '20' # Ajustez selon la version Node.js de votre projet
+          cache: 'npm'
 
-      - name: Deploy to server via SFTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4 # Vérifiez la dernière version sur GitHub Marketplace
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to server via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ secrets.FTP_SERVER }} # Ex. : ftp.votredomaine.com
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT }}         # Port SFTP, souvent 22 (pour FTP classique, c'est 21)
-          protocol: ftp                       # 'sftp' ou 'ftp'
-          
-          # Dossier local à déployer :
-          # Si vous n'avez pas d'étape de build et déployez tout le projet :
-          #local-dir: ./
-          # Si votre étape de build génère un dossier 'dist' (ou 'build') :
-          local-dir: ./dist/ 
-          
-          # Dossier distant sur le serveur :
-          server-dir: ${{ secrets.REMOTE_DIR }}
-          
-          # Options supplémentaires (décommentez si besoin) :
-          # sftp-options: "-o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null" # Peut aider avec les problèmes de clés d'hôte SFTP
-          # clean: true # Supprime les fichiers du serveur qui ne sont pas dans local-dir
-          # exclude: | # Liste des fichiers/dossiers à exclure du déploiement
-          #   **/.git*
-          #   **/.git*/**
-          #   **/node_modules/**
-          #   .github/**
+          port: 21 # Port par défaut pour FTP
+          protocol: ftp # Utilisation explicite de FTP
+          local-dir: ./dist/ # Dossier généré par npm run build
+          server-dir: ${{ secrets.REMOTE_DIR }} # Ex. : /public_html/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .github/**
