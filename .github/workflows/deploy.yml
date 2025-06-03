@@ -1,4 +1,4 @@
-name: Deploy Portfolio to Server
+name: Deploy Portfolio to Server via SSH
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Ajustez selon la version Node.js de votre projet
+          node-version: '20' # Ajustez selon la version de Node.js utilisée
           cache: 'npm'
 
       - name: Install dependencies
@@ -24,18 +24,20 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to server via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
         with:
-          server: ${{ secrets.FTP_SERVER }} # Ex. : ftp.votredomaine.com
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 21 # Port par défaut pour FTP
-          protocol: ftp # Utilisation explicite de FTP
-          local-dir: ./dist/ # Dossier généré par npm run build
-          server-dir: ${{ secrets.REMOTE_DIR }} # Ex. : /public_html/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            .github/**
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary # Nous configurerons known_hosts manuellement
+
+      - name: Add known_hosts
+        run: |
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to server via SCP
+        run: |
+          scp -P ${{ secrets.SSH_PORT }} -r ./dist/* ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_DIR }}
+
+      - name: Optional - Set permissions (if needed)
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "chmod -R 755 ${{ secrets.REMOTE_DIR }}"
