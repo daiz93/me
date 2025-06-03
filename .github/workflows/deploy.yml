@@ -46,7 +46,7 @@ jobs:
           local-dir: ./dist/ 
           
           # Dossier distant sur le serveur :
-          remote-dir: ${{ secrets.REMOTE_DIR }}
+          server-dir: ${{ secrets.REMOTE_DIR }}
           
           # Options supplémentaires (décommentez si besoin) :
           # sftp-options: "-o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null" # Peut aider avec les problèmes de clés d'hôte SFTP
