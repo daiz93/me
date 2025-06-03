@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { NAV_LINKS, PERSONAL_INFO } from '../constants';
 
@@ -35,24 +34,24 @@ const Navbar: React.FC = () => {
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else { // Fallback: go to home and then try to scroll
-            window.location.hash = `/${href}`;
+          window.location.hash = `/${href}`;
         }
       }
     }
     setIsOpen(false);
   };
 
-
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 shadow-lg backdrop-blur-md' : 'bg-transparent'}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <a 
-            href="#/" 
+          <a
+            href="#/"
             onClick={(e) => handleLinkClick(e, '#/')}
-            className={`text-2xl font-bold ${isScrolled ? 'text-sky-700' : 'text-white md:text-sky-700'}`}
+            className={`text-2xl font-bold ${isScrolled ? 'text-white' : 'text-white md:text-sky-700'}`}
           >
-            {PERSONAL_INFO.name.split(' ')[0]}<span className={isScrolled ? 'text-sky-500' : 'text-sky-400 md:text-sky-500'}>.</span>
+            {PERSONAL_INFO.name.split(' ')[0]}
+            <span className={isScrolled ? 'text-sky-500' : 'text-sky-400 md:text-sky-500'}>.</span>
           </a>
           <div className="hidden md:flex space-x-4">
             {NAV_LINKS.map((link) => (
@@ -61,7 +60,9 @@ const Navbar: React.FC = () => {
                 href={link.href}
                 onClick={(e) => handleLinkClick(e, link.href)}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isScrolled ? 'text-slate-700 hover:bg-sky-100 hover:text-sky-700' : 'text-slate-100 hover:bg-white/20 md:text-slate-700 md:hover:bg-sky-100 md:hover:text-sky-700'
+                  isScrolled
+                    ? 'text-slate-700 hover:bg-sky-100 hover:text-sky-700'
+                    : 'text-slate-100 hover:bg-white/20 md:text-slate-700 md:hover:bg-sky-100 md:hover:text-sky-700'
                 }`}
               >
                 {link.label}
@@ -80,20 +81,20 @@ const Navbar: React.FC = () => {
                 <div
                   className={`${genericHamburgerLine} ${
                     isOpen
-                      ? "rotate-45 translate-y-2 opacity-100 group-hover:opacity-100"
-                      : "opacity-100 group-hover:opacity-100"
+                      ? 'rotate-45 translate-y-2 opacity-100 group-hover:opacity-100'
+                      : 'opacity-100 group-hover:opacity-100'
                   }`}
                 />
                 <div
                   className={`${genericHamburgerLine} ${
-                    isOpen ? "opacity-0" : "opacity-100 group-hover:opacity-100"
+                    isOpen ? 'opacity-0' : 'opacity-100 group-hover:opacity-100'
                   }`}
                 />
                 <div
                   className={`${genericHamburgerLine} ${
                     isOpen
-                      ? "-rotate-45 -translate-y-2 opacity-100 group-hover:opacity-100"
-                      : "opacity-100 group-hover:opacity-100"
+                      ? '-rotate-45 -translate-y-2 opacity-100 group-hover:opacity-100'
+                      : 'opacity-100 group-hover:opacity-100'
                   }`}
                 />
               </div>
