@@ -48,10 +48,11 @@ const Navbar: React.FC = () => {
           <a
             href="#/"
             onClick={(e) => handleLinkClick(e, '#/')}
-            className={`text-2xl font-bold ${isScrolled ? 'text-white' : 'text-white md:text-sky-700'}`}
+            className={`text-2xl font-bold ${isScrolled ? 'text-white' : 'text-white md:text-white'}`}
+            aria-label="Accueil"
           >
             {PERSONAL_INFO.name.split(' ')[0]}
-            <span className={isScrolled ? 'text-sky-500' : 'text-sky-400 md:text-sky-500'}>.</span>
+            <span className={isScrolled ? 'text-white' : 'text-sky-400 md:text-white'}>.</span>
           </a>
           <div className="hidden md:flex space-x-4">
             {NAV_LINKS.map((link) => (
@@ -62,7 +63,7 @@ const Navbar: React.FC = () => {
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isScrolled
                     ? 'text-slate-700 hover:bg-sky-100 hover:text-sky-700'
-                    : 'text-slate-100 hover:bg-white/20 md:text-slate-700 md:hover:bg-sky-100 md:hover:text-sky-700'
+                    : 'text-white hover:bg-white/20  md:hover:bg-sky-100 md:hover:text-sky-700'
                 }`}
               >
                 {link.label}
