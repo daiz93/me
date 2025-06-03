@@ -12,23 +12,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4 # Récupère la dernière version de votre code
 
-      # --- Section Optionnelle: Étape de Build ---
-      # Si vous intégrez un outil de build (Vite, Parcel, etc.) avec package.json
-      # Décommentez et adaptez les lignes suivantes :
-      #
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '18' # Ou la version Node.js que vous utilisez
-      #     cache: 'npm' # Ou 'yarn'
-      #
-      # - name: Install dependencies
-      #   run: npm install # Ou yarn install
-      #
-      # - name: Build project
-      #   run: npm run build # Ou yarn build (ou la commande de build de votre projet)
-      #
-      # --- Fin de la Section Optionnelle: Étape de Build ---
+      #--- Section Optionnelle: Étape de Build ---
+      #Si vous intégrez un outil de build (Vite, Parcel, etc.) avec package.json
+      #Décommentez et adaptez les lignes suivantes :
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.15.0' # Ou la version Node.js que vous utilisez
+          cache: 'npm' # Ou 'yarn'
+      
+      - name: Install dependencies
+        run: npm install # Ou yarn install
+      
+      - name: Build project
+        run: npm run build # Ou yarn build (ou la commande de build de votre projet)
+      
+      #--- Fin de la Section Optionnelle: Étape de Build ---
 
       - name: Deploy to server via SFTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4 # Vérifiez la dernière version sur GitHub Marketplace
@@ -37,13 +37,13 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}         # Port SFTP, souvent 22 (pour FTP classique, c'est 21)
-          protocol: sftp                       # 'sftp' ou 'ftp'
+          protocol: ftp                       # 'sftp' ou 'ftp'
           
           # Dossier local à déployer :
           # Si vous n'avez pas d'étape de build et déployez tout le projet :
-          local-dir: ./
+          #local-dir: ./
           # Si votre étape de build génère un dossier 'dist' (ou 'build') :
-          # local-dir: ./dist/ 
+          local-dir: ./dist/ 
           
           # Dossier distant sur le serveur :
           remote-dir: ${{ secrets.REMOTE_DIR }}
